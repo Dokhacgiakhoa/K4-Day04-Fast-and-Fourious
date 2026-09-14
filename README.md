@@ -1,13 +1,13 @@
 # Day 04 Lab — IT Helpdesk Agent
 
-## Phân công nhiệm vụ (Team Roles & Responsibilities)
+## Thành viên & Phân công nhiệm vụ (Team Roles & Responsibilities)
 
-| STT | Thành viên | Discord / Email | GitHub | Vai trò chính | Nhiệm vụ cụ thể | Deliverables phụ trách |
-|---|---|---|---|---|---|---|
-| 1 | **Đỗ Khắc Gia Khoa** | Diệp Vân Minh (葉雲明) | [`Dokhacgiakhoa`](https://github.com/Dokhacgiakhoa) | **Team Leader & Prompt Architect** | Điều phối chung, kiến trúc hệ thống, cải tiến và tối ưu System Prompt, tổng hợp báo cáo | `system_prompt.md`, `version_log.csv`, `REPORT.md` |
-| 2 | **DungThuHaiTuanSau** | `dung.work.203@gmail.com` | - | **Tools Specialist** | Khai báo, chuẩn hóa description/schema và logic các tool, tối ưu tool declarations | `tools.yaml`, tool implementations |
-| 3 | **thèm ăn cơm chó** | `nhatminhtran.2611@gmail.com` | [`NhatMinhTran-2611`](https://github.com/NhatMinhTran-2611) | **UI/UX Engineer** | Phát triển và kiểm thử Chat UI, hiển thị trực quan tool calls, args, errors và artifact version | Giao diện Chat, UI evidence & transcripts |
-| 4 | **mark** | `tranquocbaolong2004@gmail.com` | [`longtqb04`](https://github.com/longtqb04) | **QA & Evaluation Lead** | Thiết kế 10 team test cases, chạy và phân tích các bộ eval (Base, Extension, Adversarial), thu thập metrics | `eval_group.json`, eval run logs & security analysis |
+| STT | Họ và tên | Mã học viên | Tài khoản GitHub | Vai trò chính | Nhiệm vụ cụ thể | Deliverables phụ trách |
+|:---:|---|:---:|---|---|---|---|
+| 1 | **Đỗ Khắc Gia Khoa** | `02733` | [`Dokhacgiakhoa`](https://github.com/Dokhacgiakhoa) | **Team Leader & Prompt Architect** | Điều phối chung, kiến trúc hệ thống, tối ưu System Prompt qua các version, tổng hợp báo cáo | `system_prompt.md`, `version_log.csv`, `REPORT.md` |
+| 2 | **Nguyễn Việt Dũng** | `02533` | *(Đang cập nhật)* | **Tools Specialist** | Khai báo, chuẩn hóa description/schema và logic các tool, tối ưu tool declarations | `tools.yaml`, tool implementations |
+| 3 | **Trần Nhật Minh** | `02483` | [`NhatMinhTran-2611`](https://github.com/NhatMinhTran-2611) | **UI/UX Engineer** | Phát triển và kiểm thử Chat UI, hiển thị trực quan tool calls, parameters, errors và artifact version | Giao diện Chat, UI evidence & transcripts |
+| 4 | **Trần Quốc Bảo Long** | `02696` | [`longtqb04`](https://github.com/longtqb04) | **QA & Evaluation Lead** | Thiết kế 10 test cases nhóm (`eval_group.json`), chạy & phân tích các bộ eval (Base, Extension, Adversarial), đo lường metrics | `eval_group.json`, eval run logs & security analysis |
 
 ## Tổng quan
 
