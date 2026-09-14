@@ -4,7 +4,13 @@ from providers.anthropic_provider import AnthropicProvider
 from providers.gemini_provider import GeminiProvider
 
 
-def make_provider(name: str):
+def make_provider(name: str, *, api_key: str | None = None):
+    provider = _make_provider(name)
+    provider.api_key = api_key
+    return provider
+
+
+def _make_provider(name: str):
     if name == "openai":
         return OpenAIProvider()
     if name == "openrouter":
