@@ -9,6 +9,20 @@
 | 3 | **Trần Nhật Minh** | `02483` | [`NhatMinhTran-2611`](https://github.com/NhatMinhTran-2611) | **UI/UX Engineer** | Phát triển và kiểm thử Chat UI, hiển thị trực quan tool calls, parameters, errors và artifact version | Giao diện Chat, UI evidence & transcripts |
 | 4 | **Trần Quốc Bảo Long** | `02696` | [`longtqb04`](https://github.com/longtqb04) | **QA & Evaluation Lead** | Thiết kế 10 test cases nhóm (`eval_group.json`), chạy & phân tích các bộ eval (Base, Extension, Adversarial), đo lường metrics | `eval_group.json`, eval run logs & security analysis |
 
+## Quy trình làm việc (Git workflow)
+
+Nhóm làm việc trên fork chung `Dokhacgiakhoa/K4-Day04-Fast-and-Fourious`. Quy tắc:
+
+- **Mỗi feature = 1 branch riêng** (`feat/<scope>`, `fix/<scope>`, `docs/<scope>` hoặc `contrib/<username>`).
+- **Mỗi branch mở đúng 1 Pull Request vào `main`.**
+- **Không commit trực tiếp vào `main`.**
+- **Team Leader ([@Dokhacgiakhoa](https://github.com/Dokhacgiakhoa)) review và merge** mọi PR vào `main`; **merge không squash** để giữ commit cá nhân của từng thành viên.
+
+Phân công & tiến độ từng track: xem [TASKS.md](TASKS.md). Rule chi tiết cho quy
+trình đóng góp — áp dụng cho AI agent (Antigravity, Claude, Codex) — nằm ở
+[AGENTS.md](AGENTS.md) (canonical); [CLAUDE.md](CLAUDE.md) trỏ về file này. Hướng
+dẫn setup môi trường tóm tắt: xem [SETUP-NOTES.md](SETUP-NOTES.md).
+
 ## Tổng quan
 
 
