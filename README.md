@@ -1,6 +1,30 @@
 # Day 04 Lab — IT Helpdesk Agent
 
+## Thành viên & Phân công nhiệm vụ (Team Roles & Responsibilities)
+
+| STT | Họ và tên | Mã học viên | Tài khoản GitHub | Vai trò chính | Nhiệm vụ cụ thể | Deliverables phụ trách |
+|:---:|---|:---:|---|---|---|---|
+| 1 | **Đỗ Khắc Gia Khoa** | `02733` | [`Dokhacgiakhoa`](https://github.com/Dokhacgiakhoa) | **Team Leader & Prompt Architect** | Điều phối chung, kiến trúc hệ thống, tối ưu System Prompt qua các version, tổng hợp báo cáo | `system_prompt.md`, `version_log.csv`, `REPORT.md` |
+| 2 | **Nguyễn Việt Dũng** | `02533` | *(Đang cập nhật)* | **Tools Specialist** | Khai báo, chuẩn hóa description/schema và logic các tool, tối ưu tool declarations | `tools.yaml`, tool implementations |
+| 3 | **Trần Nhật Minh** | `02483` | [`NhatMinhTran-2611`](https://github.com/NhatMinhTran-2611) | **UI/UX Engineer** | Phát triển và kiểm thử Chat UI, hiển thị trực quan tool calls, parameters, errors và artifact version | Giao diện Chat, UI evidence & transcripts |
+| 4 | **Trần Quốc Bảo Long** | `02696` | [`longtqb04`](https://github.com/longtqb04) | **QA & Evaluation Lead** | Thiết kế 10 test cases nhóm (`eval_group.json`), chạy & phân tích các bộ eval (Base, Extension, Adversarial), đo lường metrics | `eval_group.json`, eval run logs & security analysis |
+
+## Quy trình làm việc (Git workflow)
+
+Nhóm làm việc trên fork chung `Dokhacgiakhoa/K4-Day04-Fast-and-Fourious`. Quy tắc:
+
+- **Mỗi feature = 1 branch riêng** (`feat/<scope>`, `fix/<scope>`, `docs/<scope>` hoặc `contrib/<username>`).
+- **Mỗi branch mở đúng 1 Pull Request vào `main`.**
+- **Không commit trực tiếp vào `main`.**
+- **Team Leader ([@Dokhacgiakhoa](https://github.com/Dokhacgiakhoa)) review và merge** mọi PR vào `main`; **merge không squash** để giữ commit cá nhân của từng thành viên.
+
+Phân công & tiến độ từng track: xem [TASKS.md](TASKS.md). Rule chi tiết cho quy
+trình đóng góp — áp dụng cho AI agent (Antigravity, Claude, Codex) — nằm ở
+[AGENTS.md](AGENTS.md) (canonical); [CLAUDE.md](CLAUDE.md) trỏ về file này. Hướng
+dẫn setup môi trường tóm tắt: xem [SETUP-NOTES.md](SETUP-NOTES.md).
+
 ## Tổng quan
+
 
 Trong bài lab này, học viên xây dựng và cải tiến một IT Helpdesk Agent có khả
 năng chọn tool, truyền arguments, xử lý hội thoại nhiều lượt và bảo vệ các ranh

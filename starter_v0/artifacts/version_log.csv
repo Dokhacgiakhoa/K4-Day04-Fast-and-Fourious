@@ -1,1 +1,5 @@
-version,author,changed_artifact,artifact_version,prompt_hash,tools_hash,reason,hypothesis,metric_name,metric_before,metric_after,run_file
+version,date,artifact_changed,change_summary,hypothesis,metric,before,after,prompt_hash,tools_hash,run_file,notes
+v0,,none (baseline),Starter artifacts giữ nguyên,Baseline làm mốc so sánh,routing_accuracy,,,,,runs/v0_openrouter_base_<ts>.json,Chạy trước khi tối ưu; provider_error_cases==0
+v1,,,,,,,,,,,
+v2,,,,,,,,,,,
+v3,,,,,,,,,,,
