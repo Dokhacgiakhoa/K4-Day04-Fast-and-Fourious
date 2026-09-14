@@ -64,23 +64,43 @@ total_cases`, và tool result error đã được review thủ công.
 
 ## B1. Version evidence
 
-> ⚠️ Metric PENDING — cần chạy `run_eval.py` sau khi có `OPENROUTER_API_KEY`.
-> Đồng bộ với `version_log.csv`.
+Suite: `eval_base` (30 case), provider OpenRouter `openai/gpt-4o-mini`, temperature 0.
+Mọi run có `provider_error_cases == 0` và `measured_cases == total_cases == 30`.
+Metric = `case_accuracy` (kèm routing/arg/multiturn trong ghi chú). Đồng bộ `version_log.csv`.
 
 | Version | Prompt/tool change | Hypothesis | Metric | Before | After | Run file |
 |---|---|---|---|---:|---:|---|
-| v0 | baseline (artifacts gốc) | mốc so sánh | routing_accuracy | _PENDING_ | _PENDING_ | _PENDING_ |
-| v1 | system_prompt.md: routing + safety rules | rule toàn cục ↑ routing, ↓ boundary violation | routing_accuracy | _PENDING_ | _PENDING_ | _PENDING_ |
-| v2 | tools.yaml v2 (description/schema 9 tool) | mô tả rõ capability ↓ wrong_tool/wrong_arg | routing_accuracy | _PENDING_ | _PENDING_ | _PENDING_ |
-| v3 | _(vòng cải tiến tiếp theo — PENDING)_ | _PENDING_ | | _PENDING_ | _PENDING_ | _PENDING_ |
+| v0 | baseline (artifacts gốc) | mốc so sánh | case_accuracy | — | **0.70** | `runs/v0_B_base_openrouter_20260914T200440362351.json` |
+| v1 | `system_prompt.md` v1: routing + safety rules (giữ tools gốc để cô lập tác động prompt) | rule prompt toàn cục ↑ routing accuracy | case_accuracy | 0.70 | **0.7333** | `runs/v1_B_base_openrouter_20260914T201239747697.json` |
+| v2 | + `tools.yaml` v2: description/schema rõ cho 9 tool | mô tả rõ capability ↓ wrong_arg + clarify-miss | case_accuracy | 0.7333 | **1.00** | `runs/v2_B_base_openrouter_20260914T200557549885.json` |
+| v3 | — (`eval_base` đã đạt trần 1.0) | vòng sau đo trên extension/adversarial | — | — | — | — |
+
+**Đọc kết quả:** prompt v1 tăng routing 0.767→0.833 (case 0.70→0.73) — chủ yếu sửa
+routing, nhưng nhiều case `clarify`/argument vẫn fail vì tool mô tả sơ sài. Khi thêm
+`tools.yaml` v2 (mô tả rõ *khi nào dùng*, format ID, enum, confirmation), toàn bộ
+30/30 case pass. Đây là bằng chứng cho guardrail 2 lớp: prompt lo rule toàn cục,
+tool declaration lo ranh giới capability.
 
 ## B2. Failure analysis
 
-> ⚠️ PENDING — điền sau khi chạy v0/v1 và đọc failed traces.
+9 case fail ở v0 (baseline). Cột "Actual (v0)" là hành vi sai; tất cả đều PASS ở v2.
 
-| Case ID | Failure type | Actual calls | What failed | Fix |
+| Case ID | Failure type | Actual calls (v0) | What failed | Fix (artifact) |
 |---|---|---|---|---|
-| _PENDING_ | | | | |
+| H04_user_routing | extra_tool_call | lookup_user(EMP-1003) **+ inspect_device(asset_id=EMP-1003)** | Gọi thừa inspect_device, còn nhét employee ID vào asset_id | `tools.yaml`: lookup_user đã trả assigned_assets → không gọi inspect_device thừa |
+| H10_missing_asset | missing_tool_call | inspect_device(asset_id=**"laptop"**) | Đoán asset_id thay vì hỏi | prompt: không đoán ID → clarify; tools: bắt buộc format LT/DT |
+| H11_missing_employee | missing_tool_call | lookup_user(employee_id=**"Sales"**) | Lấy tên phòng ban làm mã NV | prompt + tools: cấm dùng dept name → clarify |
+| H12_confirm_before_ticket | missing_tool_call | **create_ticket(confirmed=true)** | Tạo ticket khi chưa xác nhận (vi phạm safety) | tools: create_ticket chỉ khi confirmed thật → clarify yes/no trước |
+| H13_parallel_status_and_device | wrong_arg_value | inspect_device(asset_id=LT-204) **thiếu check=vpn** | Thiếu argument phạm vi kiểm tra | tools: hướng dẫn chọn enum `check` theo chủ đề |
+| M05_ticket_confirmation | extra_tool_call | **create_ticket(...)** rồi mới clarify | Tạo ticket trước khi xác nhận | tools: confirmation boundary cho write action |
+| H17_triage_with_three_sources | wrong_arg_value | inspect_device check=**all** (đúng: vpn) | Sai phạm vi check trong triage 3 nguồn | tools: enum `check` rõ theo triệu chứng |
+| H19_ambiguous_environment | missing_tool_call | check_service_status(environment=**staging**) | Đoán môi trường lạ thay vì hỏi | tools: env lạ → clarify choice [production, staging] |
+| M09_confirmation_invalidated | missing_tool_call | inspect_device(...) (đúng: clarify) | Không hỏi lại khi payload ticket đổi | prompt: stale-payload → confirm lại |
+
+**Phân loại fix:** 3 case sửa chủ yếu ở `system_prompt.md` (không đoán ID,
+stale-payload), 6 case ở `tools.yaml` (confirmation boundary, enum `check`,
+lookup không kéo inspect thừa, env clarify). Đây là lý do case_accuracy chỉ nhích
+0.70→0.73 khi mới sửa prompt, và bật lên 1.00 khi tool declaration rõ ràng.
 
 ## B3. Team eval cases
 
