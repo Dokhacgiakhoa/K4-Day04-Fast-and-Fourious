@@ -73,7 +73,7 @@ class GeminiProvider:
         self,
         *,
         api_key_env: str = "GEMINI_API_KEY",
-        default_model: str = "gemini-3.5-flash",
+        default_model: str = "gemini-3.5-flash-lite",
     ) -> None:
         self.api_key_env = api_key_env
         self.default_model = default_model
@@ -93,7 +93,7 @@ class GeminiProvider:
         except ImportError as exc:
             raise RuntimeError("Install live provider dependency first: pip install google-genai") from exc
 
-        api_key = os.getenv(self.api_key_env)
+        api_key = getattr(self, "api_key", None) or os.getenv(self.api_key_env)
         if not api_key:
             raise RuntimeError(f"Missing API key env var: {self.api_key_env}")
 

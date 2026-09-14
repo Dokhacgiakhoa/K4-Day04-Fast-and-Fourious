@@ -11,11 +11,11 @@ Repo: `Dokhacgiakhoa/K4-Day04-Fast-and-Fourious` (Team **Fast and Fourious**, K4
 
 1. **Mỗi feature = 1 branch riêng.** Không gộp nhiều feature vào một branch.
    - Đặt tên branch: `feat/<mô-tả-ngắn>`, `fix/<...>`, `docs/<...>`, hoặc `contrib/<github_username>` cho phần việc cá nhân.
-2. **Mỗi branch = đúng 1 Pull Request vào `main`.**
-3. **KHÔNG commit trực tiếp vào `main`.** Nếu đang ở `main`, phải tạo branch mới trước khi commit.
-4. **AI KHÔNG tự merge vào `main`.** Sau khi mở PR, dừng lại và báo cho Lead ([@Dokhacgiakhoa](https://github.com/Dokhacgiakhoa)). Chỉ Lead review và merge.
+2. **PR LÀ BẮT BUỘC.** Hễ đã push commit lên một branch thì **phải mở đúng 1 Pull Request vào `main`** cho branch đó. Commit/push mà không mở PR là **không hợp lệ** — `main` đã bật ruleset "require pull request", branch không có PR sẽ **không bao giờ được merge** và xem như chưa đóng góp gì.
+3. **KHÔNG commit trực tiếp vào `main`.** Nếu đang ở `main`, phải tạo branch mới trước khi commit. (GitHub ruleset chặn push thẳng đối với collaborator.)
+4. **AI KHÔNG tự merge vào `main`.** Sau khi mở PR, dừng lại và báo cho Lead ([@Dokhacgiakhoa](https://github.com/Dokhacgiakhoa)). Việc merge do Lead hoặc cơ chế auto-merge của Lead (chỉ merge PR sạch + compile pass) thực hiện, không phải agent tự merge.
 5. **Merge KHÔNG squash** — giữ commit cá nhân của từng thành viên (điều kiện chấm điểm).
-6. Chỉ push/commit khi người dùng yêu cầu rõ ràng.
+6. Chỉ push/commit khi người dùng yêu cầu rõ ràng. **Push xong là mở PR ngay**, không để branch lơ lửng.
 
 ## Luồng chuẩn cho một feature
 
