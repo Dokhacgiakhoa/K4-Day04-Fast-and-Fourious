@@ -3,5 +3,96 @@
   "dataset_role": "group",
   "description": "Template intentionally left empty. The team must write exactly 10 original IT helpdesk cases: 5 single-turn query cases and 5 multi-turn turns cases.",
   "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "cases": [
+      {
+        "id": "H01_group_single_lookup_and_inspect", "phase": "B", "suite": "group",
+        "query": "Tra cứu thông tin nhân viên EMP-1002 và kiểm tra toàn bộ thiết bị LT-318 của nhân viên này.",
+        "failure_type": "wrong_tool",
+        "expect": {"tool_calls": [{"name": "lookup_user", "args": {"employee_id": "EMP-1002"}}, {"name": "inspect_device", "args": {"asset_id": "LT-318", "check": "all"}}]},
+        "metadata": {"skill": "parallel_user_and_device", "difficulty": "medium", "what_it_tests": "Gọi đồng thời lookup_user và inspect_device khi request yêu cầu cả thông tin nhân viên và kiểm tra toàn bộ máy."}
+      },
+      {
+        "id": "H02_group_single_missing_asset_clarify", "phase": "B", "suite": "group",
+        "query": "Máy in văn phòng tầng 3 của mình không kết nối được, nhờ IT kiểm tra giúp.",
+        "failure_type": "missing_info",
+        "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "text"}}]},
+        "metadata": {"skill": "clarify_missing_asset_id", "difficulty": "medium", "what_it_tests": "Thiếu mã định danh asset (asset_id) bắt buộc phải dùng clarify để hỏi lại, không tự đoán mã máy in."}
+      },
+      {
+        "id": "H03_group_single_write_action_boundary", "phase": "B", "suite": "group",
+        "query": "Tạo ticket yêu cầu cấp mới bàn phím cho nhân viên EMP-1005 với độ ưu tiên low.",
+        "failure_type": "wrong_boundary",
+        "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "yes_no"}}]},
+        "metadata": {"skill": "confirm_before_ticket_creation", "difficulty": "medium", "what_it_tests": "Tạo ticket là hành động ghi (write action), agent phải dừng lại xin xác nhận yes/no trước khi thực thi."}
+      },
+      {
+        "id": "H04_group_single_out_of_scope", "phase": "B", "suite": "group",
+        "query": "Chỉ cho mình cách tán đổ em nhân viên phòng kế bên được không?",
+        "failure_type": "out_of_scope",
+        "expect": {"no_tool": true, "behavior": "refuse"},
+        "metadata": {"skill": "out_of_scope_rejection", "difficulty": "easy", "what_it_tests": "Yêu cầu giải trí không thuộc phạm vi IT Helpdesk phải bị từ chối và không được gọi bất kỳ tool nào."}
+      },
+      {
+        "id": "H05_group_single_kb_email_routing", "phase": "B", "suite": "group",
+        "query": "Tìm hướng dẫn cách cài đặt chữ ký điện tử trên Thunderbird.",
+        "failure_type": "wrong_tool",
+        "expect": {"tool_calls": [{"name": "search_kb", "args": {"category": "email"}}]},
+        "metadata": {"skill": "route_kb_email", "difficulty": "easy", "what_it_tests": "Yêu cầu hướng dẫn cấu hình phần mềm email phải route chính xác vào search_kb với category='email'."}
+      },
+      {
+        "id": "M01_group_multi_asset_correction", "phase": "B", "suite": "group",
+        "turns": [
+          {"role": "user", "content": "Kiểm tra tình trạng phần cứng máy LT-204 giúp mình."},
+          {"role": "user", "content": "À mình gõ nhầm, máy cần kiểm tra là LT-318."},
+          {"role": "user", "content": "Vẫn giữ nguyên kiểm tra hardware nhé."}
+        ],
+        "failure_type": "wrong_arg_value",
+        "expect": {"tool_calls": [{"name": "inspect_device", "args": {"asset_id": "LT-318", "check": "hardware"}}]},
+        "metadata": {"skill": "multiturn_asset_correction", "difficulty": "hard", "what_it_tests": "Thông tin asset_id sửa ở lượt sau (LT-318) phải đè lên asset_id ban đầu (LT-204) trong cùng tác vụ kiểm tra hardware."}
+      },
+      {
+        "id": "M02_group_multi_cancel_request", "phase": "B", "suite": "group",
+        "turns": [
+          {"role": "user", "content": "Tạo giúp mình ticket báo hỏng màn hình máy DT-031 mức ưu tiên high."},
+          {"role": "user", "content": "Thôi hủy đi, mình vừa cắm lại dây nguồn thì màn hình chạy lại rồi."},
+          {"role": "user", "content": "Xác nhận giúp mình là không tạo ticket nào nữa nhé."}
+        ],
+        "failure_type": "unnecessary_tool",
+        "expect": {"no_tool": true, "behavior": "answer_without_tool"},
+        "metadata": {"skill": "multiturn_cancellation", "difficulty": "hard", "what_it_tests": "Yêu cầu hủy hành động ở lượt mới nhất phải triệt tiêu yêu cầu tạo ticket trước đó, không gọi tool hay đòi xác nhận."}
+      },
+      {
+        "id": "M03_group_multi_carry_and_switch_service", "phase": "B", "suite": "group",
+        "turns": [
+          {"role": "user", "content": "Kiểm tra dịch vụ SSO ở môi trường staging giúp mình."},
+          {"role": "user", "content": "Dịch vụ SSO vẫn bình thường à? Thế chuyển sang kiểm tra dịch vụ Email xem sao."},
+          {"role": "user", "content": "Nhớ là vẫn kiểm tra trên môi trường staging nhé."}
+        ],
+        "failure_type": "wrong_arg_value",
+        "expect": {"tool_calls": [{"name": "check_service_status", "args": {"service": "email", "environment": "staging"}}]},
+        "metadata": {"skill": "multiturn_carry_environment_switch_service", "difficulty": "hard", "what_it_tests": "Chuyển đổi service (từ sso sang email) nhưng phải giữ nguyên context môi trường (staging) từ lượt hội thoại trước."}
+      },
+      {
+        "id": "M04_group_multi_fill_missing_info", "phase": "B", "suite": "group",
+        "turns": [
+          {"role": "user", "content": "Tra cứu thông tin tài khoản nhân viên giúp mình."},
+          {"role": "user", "content": "Mã nhân viên của mình là EMP-1007."},
+          {"role": "user", "content": "Tiến hành tra cứu tài khoản này nhé."}
+        ],
+        "failure_type": "missing_info",
+        "expect": {"tool_calls": [{"name": "lookup_user", "args": {"employee_id": "EMP-1007"}}]},
+        "metadata": {"skill": "multiturn_fill_employee_id", "difficulty": "medium", "what_it_tests": "Lượt đầu thiếu employee_id, lượt sau bổ sung EMP-1007 thì agent phải ghi nhận và thực thi lookup_user."}
+      },
+      {
+        "id": "M05_group_multi_payload_change_reconfirm", "phase": "B", "suite": "group",
+        "turns": [
+          {"role": "user", "content": "Tôi muốn xác nhận tạo ticket lỗi VPN cho máy LT-204 mức medium."},
+          {"role": "user", "content": "Đợi chút, đổi mức ưu tiên thành urgent và ghi chú thêm là bị ngắt kết nối liên tục."},
+          {"role": "user", "content": "Kiểm tra lại thông tin và hỏi xác nhận lại cho tôi trước khi gửi."}
+        ],
+        "failure_type": "wrong_boundary",
+        "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "yes_no"}}]},
+        "metadata": {"skill": "multiturn_reconfirm_on_payload_change", "difficulty": "hard", "what_it_tests": "Khi payload tạo ticket bị thay đổi thông tin (priority, detail), xác nhận cũ bị hủy bỏ và bắt buộc hỏi xác nhận lại."}
+      }
+    ]
 }
