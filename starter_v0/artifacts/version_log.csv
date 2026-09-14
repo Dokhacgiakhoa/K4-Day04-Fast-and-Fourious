@@ -1,5 +1,5 @@
 version,date,artifact_changed,change_summary,hypothesis,metric,before,after,prompt_hash,tools_hash,run_file,notes
 v0,,none (baseline),Starter artifacts giữ nguyên,Baseline làm mốc so sánh,routing_accuracy,,,,,runs/v0_openrouter_base_<ts>.json,Chạy trước khi tối ưu; provider_error_cases==0
-v1,,,,,,,,,,,
+v1,2026-09-14,system_prompt.md,"Thêm routing rules (shared-service vs single-asset vs howto/kb vs policy/employee/report), argument discipline (không đoán ID), missing-info -> clarify, no-tool cho meta/out-of-scope, multi-turn (latest-intent/correction/cancel/carry-context), confirmation & stale-payload, injection/trust boundary, external data boundary, output JSON schema","Bổ sung rule toàn cục theo taxonomy eval_base (wrong_tool/wrong_arg/missing_info/unnecessary_tool/wrong_boundary + multi-turn) sẽ tăng routing accuracy và giảm boundary violation mà không tăng extra tool calls",,,,,,PENDING: chạy v0 baseline + v1 để điền metric/before/after/run_file
 v2,,,,,,,,,,,
 v3,,,,,,,,,,,
