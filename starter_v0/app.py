@@ -152,7 +152,7 @@ def main() -> None:
         st.markdown('<div class="desk-section"><strong>Kết nối AI</strong><span>CẤU HÌNH CHO PHIÊN CỦA BẠN</span></div>', unsafe_allow_html=True)
         provider_col, model_col, key_col = st.columns([1, 1.4, 1.6])
         with provider_col:
-            provider_name = st.selectbox("Provider", ["gemini", "openrouter", "openai", "anthropic"],
+            provider_name = st.selectbox("Provider", ["openrouter", "gemini", "openai", "anthropic"],
                                          format_func=lambda name: {
                                              "gemini": "Gemini · Google AI Studio",
                                              "openrouter": "OpenRouter",
