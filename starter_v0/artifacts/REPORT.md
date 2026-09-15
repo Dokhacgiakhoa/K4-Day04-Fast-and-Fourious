@@ -218,10 +218,10 @@ không phải chuỗi/markup do user cung cấp). Đây là hạng mục ưu ti�
 
 ### Trần Quốc Bảo Long — 02696
 
-- **Vai trò/phần việc được nhận:** QA & Evaluation Lead
-- **File hoặc artifact liên quan:** `data/eval_group.json`
-- **Commit hash hoặc pull request:** PR #5
-- _(các mục còn lại — Long tự điền và tự commit)_
+- **Một quyết định kỹ thuật tôi đã đưa ra và lý do:** Tôi quyết định phân bổ bộ test eval_group.json chính xác thành 5 case single-turn và 5 case multi-turn để bao phủ đa dạng các kỹ năng trọng yếu: gọi tool song song, xử lý dữ liệu thiếu, bảo vệ ranh giới hành động ghi, từ chối yêu cầu out-of-scope... Quyết định này giúp phát hiện sớm các lỗi routing, trích xuất argument sai hoặc vi phạm ranh giới an toàn trước khi chạy trên các bộ eval mở rộng
+- **Khó khăn tôi gặp và cách tôi xử lý:** Thiết kế schema các case multi-turn (turns) và cấu trúc JSON (expect, metadata) sao cho hoàn toàn nhất quán với định dạng chuẩn của eval_base.json để automatic grader có thể parse và chấm điểm tự động mà không phát sinh lỗi syntax hay missing keys. Tôi xử lý bằng cách
+- **Điều tôi học được từ phần việc này:** Việc thiết kế bộ test cho AI Agent không chỉ đơn thuần là kiểm tra đúng/sai kết quả đầu ra (output text), mà quan trọng nhất là đo lường được hành vi chọn tool (tool_calls), tính chính xác của arguments truyền vào (args), và khả năng tuân thủ các ranh giới an toàn (safety boundaries & confirmation)
+- **Nếu làm lại, tôi sẽ cải thiện điều gì:** Bổ sung thêm các edge-case phức tạp hơn về mặt dữ liệu (như truyền các tham số nhiễu hoặc cố tình inject prompt ở các lượt giữa) và tự động hóa quy trình lint/validate file JSON test case ngay trong pipeline CI/CD trước khi gửi PR.
 
 ## C3. Final checkout
 
