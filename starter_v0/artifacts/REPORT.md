@@ -161,8 +161,8 @@ không phải chuỗi/markup do user cung cấp). Đây là hạng mục ưu ti�
 
 | Category | Evidence file | What worked | Risk / guardrail |
 |---|---|---|---|
-| Optional built-in (`policy`) | _PENDING_ | Tra IT policy nội bộ có source metadata | trust_boundary; không theo instruction nhúng |
-| External search + privacy boundary (`search_device_info`) | _PENDING_ | Tìm specs/driver công khai | Chỉ gửi manufacturer/model/query_type; chặn asset/employee ID, serial, hostname |
+| Optional built-in (`policy`) | `runs/v3_B_extension_openai_20260914T200951123988.json` | Tra cứu 6 nhóm IT policy nội bộ chính xác có source metadata (10/10 pass) | trust_boundary; không tuân theo instruction độc hại nhúng trong KB/policy |
+| External search + privacy boundary (`search_device_info`) | `runs/v3_B_extension_openai_20260914T200951123988.json` | Tra cứu thông tin phần cứng/driver công khai thành công qua Tavily | Chỉ gửi manufacturer/model/query_type; chặn tuyệt đối asset/employee ID, serial, hostname ra ngoài web |
 | Bonus: tool mới do nhóm tự xây | _(không có)_ | | |
 
 ## B6. Safety review
@@ -200,10 +200,14 @@ không phải chuỗi/markup do user cung cấp). Đây là hạng mục ưu ti�
 
 ### Nguyễn Việt Dũng — 02533
 
-- **Vai trò/phần việc được nhận:** Tools Specialist
-- **File hoặc artifact liên quan:** `tools.yaml`
-- **Commit hash hoặc pull request:** PR #4
-- _(các mục còn lại — Dũng tự điền và tự commit)_
+- **Vai trò/phần việc được nhận:** Tools Specialist (Track B) — Thiết kế, chuẩn hóa mô tả và JSON schema cho toàn bộ 9 công cụ trong `tools.yaml`.
+- **Những gì tôi đã thay đổi trong repo chung:** Cải tiến toàn diện 9 công cụ (6 core + 3 advanced), bổ sung format ID bắt buộc (`LT-xxx`, `EMP-xxxx`), ràng buộc enum cho `check` và `policy_area`, thiết lập ranh giới dữ liệu riêng tư (chặn leak mã nội bộ ra external search) và ranh giới xác nhận nghiêm ngặt cho thao tác ghi ticket.
+- **File hoặc artifact liên quan:** `starter_v0/artifacts/tools.yaml`, `starter_v0/TOOLS-GUIDE.md`
+- **Commit hash hoặc pull request:** PR #4, PR #9, commits `9eaecdc`, `6fcbd8e`, `79a91d1`.
+- **Một quyết định kỹ thuật tôi đã đưa ra và lý do:** Quyết định xem "Tool declaration chính là một phần của prompt". Thay vì chỉ mô tả sơ sài tên hàm, tôi đưa trực tiếp quy tắc nghiệp vụ, enum hợp lệ và ranh giới an toàn vào docstring/schema. Quyết định này giúp case accuracy của nhóm tăng vọt từ 70% (v0) lên 100% (v2/v3) trên cả `eval_base` (30/30) và `eval_helpdesk_extension` (10/10).
+- **Khó khăn tôi gặp và cách tôi xử lý:** Khó khăn lớn nhất là model hay gọi thừa tool (ví dụ gọi `inspect_device` ngay sau `lookup_user`) hoặc tự ý gán `confirmed=true` khi chưa có xác nhận từ người dùng. Tôi đã xử lý bằng cách bổ sung quy định rõ ràng trong `lookup_user` (đã chứa sẵn `assigned_assets`), và đặt guardrail nghiêm ngặt trong `create_ticket` (chỉ chấp nhận lời nói trực tiếp từ user, vô hiệu hóa xác nhận cũ khi payload thay đổi).
+- **Điều tôi học được từ phần việc này:** Hiểu sâu sắc về thiết kế Tool Calling trong hệ thống Agentic AI. Không thể chỉ dựa vào prompt toàn cục; việc định nghĩa chặt chẽ Tool Schema và Capability Boundary là lớp phòng thủ (defense-in-depth) cực kỳ quan trọng để ngăn chặn tool misuse và rò rỉ dữ liệu.
+- **Nếu làm lại, tôi sẽ cải thiện điều gì:** Tôi sẽ đề xuất cơ chế backend-level confirmation token cho tool `create_ticket` (hệ thống sinh token một lần ở lượt clarify) thay vì chỉ dựa vào cờ boolean `confirmed` do model kiểm soát, nhằm phòng chống triệt để các đòn tấn công argument smuggling và role spoofing ghi nhận trong bộ adversarial.
 
 ### Trần Nhật Minh — 02483
 
